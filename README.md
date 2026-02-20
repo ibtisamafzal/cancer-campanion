@@ -1,94 +1,67 @@
-# Welcome to your Lovable project
+# Cancer Companion
 
-## Project info
-
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+A patient-focused application for cancer treatment navigation and clinical trial discovery, developed for the **[Med-Gemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge)** on Kaggle.
 
 ---
 
-## Host on your own Supabase
+## Overview
 
-You can run the backend (Edge Functions) and point the app to **your own** Supabase project instead of the one Lovable set up.
+Cancer Companion helps patients and caregivers explore treatment options and find relevant clinical trials. The application provides AI-assisted treatment navigation, trial matching, and text-to-speech support for accessibility.
 
-### 1. Create or use your Supabase project
+## Competition
 
-- Go to [supabase.com](https://supabase.com) and create a project (or use an existing one).
-- In **Project Settings → API**, copy:
-  - **Project URL** → use as `VITE_SUPABASE_URL`
-  - **anon public** key → use as `VITE_SUPABASE_PUBLISHABLE_KEY`
-  - **Project ID** (in the URL or settings) → use as `VITE_SUPABASE_PROJECT_ID`
+This project was built as an entry for the [Med-Gemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge), a Kaggle competition focused on applying medical AI to real-world impact.
 
-### 2. Point the app to your project
+---
 
-In the project root, create or update `.env`:
+## Tech Stack
+
+- **Frontend:** Vite, TypeScript, React  
+- **UI:** shadcn-ui, Tailwind CSS  
+- **Backend:** Supabase (Edge Functions)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) and npm (recommended: [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+
+### Local Development
+
+```bash
+git clone <YOUR_GIT_URL>
+cd cancer-campanion
+npm install
+npm run dev
+```
+
+The development server runs with hot reload. Open the URL shown in the terminal to view the app.
+
+### Editing Options
+
+- **Local IDE:** Clone the repository and work in your preferred editor; push changes to your remote as usual.
+- **GitHub:** Use the web editor (Edit button on any file) to make and commit changes.
+- **GitHub Codespaces:** Open the repo → Code → Codespaces → New codespace to develop in the cloud.
+
+---
+
+## Deployment: Hosting on Your Own Supabase
+
+The backend runs on Supabase Edge Functions. You can use your own Supabase project instead of a shared instance.
+
+### 1. Create a Supabase project
+
+1. Go to [supabase.com](https://supabase.com) and create a project (or use an existing one).
+2. In **Project Settings → API**, note:
+   - **Project URL** → `VITE_SUPABASE_URL`
+   - **anon public** key → `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - **Project ID** → `VITE_SUPABASE_PROJECT_ID`
+
+### 2. Configure environment
+
+In the project root, create or update `.env` (or `.env.local`; do not commit secrets):
 
 ```env
 VITE_SUPABASE_PROJECT_ID="your-project-id"
@@ -96,50 +69,50 @@ VITE_SUPABASE_PUBLISHABLE_KEY="your-anon-key"
 VITE_SUPABASE_URL="https://your-project-id.supabase.co"
 ```
 
-Do **not** commit real keys; use `.env.local` or keep `.env` in `.gitignore` if it isn’t already.
+### 3. Deploy Edge Functions
 
-### 3. Link and deploy Edge Functions
+Install the [Supabase CLI](https://supabase.com/docs/guides/cli), then:
 
-Install the [Supabase CLI](https://supabase.com/docs/guides/cli) if needed, then:
-
-```sh
-# Log in and link this repo to your project
+```bash
 npx supabase login
 npx supabase link --project-ref your-project-id
 
-# Deploy all Edge Functions
 npx supabase functions deploy treatment-navigator
 npx supabase functions deploy trial-finder
 npx supabase functions deploy tts-generate
 ```
 
-If your `supabase/config.toml` has a different `project_id`, linking overrides it for CLI commands.
+### 4. Set function secrets
 
-### 4. Set Edge Function secrets
+Configure these secrets in your Supabase project:
 
-Your functions need these env vars (set as Supabase “secrets”):
-
-| Secret | Used by |
-|--------|--------|
+| Secret | Functions |
+|--------|-----------|
 | `AIMLAPI_API_KEY` | treatment-navigator, trial-finder |
 | `FIRECRAWL_API_KEY` | treatment-navigator, trial-finder |
 | `PERPLEXITY_API_KEY` | treatment-navigator, trial-finder |
 | `ELEVENLABS_API_KEY` | tts-generate |
 
-Example (replace with your real values):
+Example:
 
-```sh
+```bash
 npx supabase secrets set AIMLAPI_API_KEY=your-aiml-key
 npx supabase secrets set FIRECRAWL_API_KEY=your-firecrawl-key
 npx supabase secrets set PERPLEXITY_API_KEY=your-perplexity-key
 npx supabase secrets set ELEVENLABS_API_KEY=your-elevenlabs-key
 ```
 
-### 5. Run the app
+### 5. Run the application
 
-```sh
-npm i
+```bash
+npm install
 npm run dev
 ```
 
-The app uses only `VITE_SUPABASE_*` to talk to Supabase; there is no Lovable-specific backend. Once the env points to your project and the functions are deployed and secrets are set, everything runs on your Supabase.
+With a valid `.env`, deployed functions, and secrets set, the app runs entirely against your Supabase project.
+
+---
+
+## License
+
+See the repository for license information.
