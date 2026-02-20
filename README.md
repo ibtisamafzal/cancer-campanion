@@ -116,3 +116,5 @@ With a valid `.env`, deployed functions, and secrets set, the app runs entirely 
 ## License
 
 See the repository for license information.
+
+Developed by GenAI Innovators.
